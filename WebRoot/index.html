@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>index.html</title>
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+    <style type="text/css">
+    	.table{
+    		width:80%;
+    		margin-right:auto;
+    		margin-left:auto;
+    		text-align:center;
+    		margin-top:3%;
+    	}
+    </style>
+	<script src="jquery.min.js"></script>
+	  </head>
+  
+  <body>
+    <table class="table table-bordered">
+   <caption><h2>Test</h2></caption>
+   <thead>
+     
+   </thead>
+   <tbody>
+      <tr>
+         <td><button class="btn btn-success" id="signin">signIn</button></td>
+         <td><button class="btn btn-success" id="login">login</button></td>
+      </tr>
+      <tr>        
+         <td><button class="btn btn-success" id="getentities">getEntities</button></td>
+         <td><button class="btn btn-success" id="getfences">getFences</button></td>
+      </tr>  
+       <tr>
+         <td><button class="btn btn-success" id="createfence">createFence</button></td>
+         <td><button class="btn btn-success" id="updatefence">updateFence</button></td>
+      </tr>
+      <tr>        
+         <td><button class="btn btn-success" id="deletefence">deleteFence</button></td>
+         <td><button class="btn btn-success" id="getfence">getFence</button></td>
+      </tr>
+      <tr>        
+         <td><button class="btn btn-success" id="entitystatus">entityStatus</button></td>
+         <td><button class="btn btn-success" id="getStatus">getStatus</button></td>
+      </tr>
+      <tr>        
+         <td><button class="btn btn-success" id="logout">logout</button></td>
+         <td><button class="btn btn-success" id="changepwd">changePWD</button></td>
+      </tr>
+      <tr>        
+         <td><button class="btn btn-success" id="getlocation">getLocation</button></td>
+         <td><button class="btn btn-success" id="getlocations">getLocations</button></td>
+      </tr>
+      <tr>        
+         <td><button class="btn btn-success" id="createalarm">createAlarm</button></td>
+         <td><button class="btn btn-success" id="deletealarm">deleteAlarm</button></td>
+      </tr>
+      <tr>        
+         <td><button class="btn btn-success" id="onoffalarm">OnOffAlarm</button></td>
+         <td><button class="btn btn-success" id="notifyType">notifyType</button></td>
+      </tr>
+   </tbody>
+</table>
+<script>
+var token;
+
+$("#deletealarm").click(function(){
+	
+	 $.ajax({
+
+	     type: 'DELETE',
+
+	     url: './alarm/1?token='+token ,
+
+	   
+	    
+	    success: function(data){
+	    	 alert("status:" +data.ret.code+" msg:"+ data.ret.msg + "  data:=" + data.data );
+	    } ,
+
+	    dataType: 'json'
+
+	}); 
+
+});
+
+
+$("#onoffalarm").click(function(){
+	
+	 $.ajax({
+
+	     type: 'PUT',
+
+	     url: './alarm/1?token='+token ,
+
+	    data:{status:2},
+	    
+	    success: function(data){
+	    	 alert("status:" +data.ret.code+" msg:"+ data.ret.msg + "  data:=" + data.data );
+	    } ,
+
+	    dataType: 'json'
+
+	}); 
+
+});
+
+
+$("#notifyType").click(function(){
+	
+	 $.ajax({
+
+	     type: 'PUT',
+ 
+	     url: './alarm/2?token='+token ,
+
+	    data:{notifyType:2},
+	    
+	    success: function(data){
+	    	 alert("status:" +data.ret.code+" msg:"+ data.ret.msg + "  data:=" + data.data );
+	    } ,
+
+	    dataType: 'json'
+
+	}); 
+
+});
+
+
+$("#createalarm").click(function(){
+	
+	$.post("./alarm",{token:token,type:1,notifyType:1},function(data){
+	    alert("status:" +data.ret.code+" msg:"+ data.ret.msg);
+	    var json=data.data;
+	    console.log(json);
+	  },"json");
+});
+
+$("#getlocations").click(function(){
+	
+	$.get("./entity/11/locations/1/10",{token:token},function(data){
+	    alert("status:" +data.ret.code+" msg:"+ data.ret.msg);
+	    var json=data.data;
+	    console.log(json);
+	  },"json");
+});
+
+$("#changepwd").click(function(){
+	
+	 $.ajax({
+
+	     type: 'PUT',
+  
+	     url: './user/3?token='+token ,
+
+	    data:{password:'123'},
+	    
+	    success: function(data){
+	    	 alert("status:" +data.ret.code+" msg:"+ data.ret.msg + "  data:=" + data.data );
+	    } ,
+
+	    dataType: 'json'
+
+	}); 
+
+});
+
+
+$("#logout").click(function(){
+	
+	$.get("./app/logout",{token:token},function(data){
+	    alert("status:" +data.ret.code+" msg:"+ data.ret.msg);
+	    var json=data.data;
+	    console.log(json);
+	  },"json");
+});
+
+$("#entitystatus").click(function(){
+	
+	$.get("./entity/11/entity_status",{token:token},function(data){
+	    alert("status:" +data.ret.code+" msg:"+ data.ret.msg);
+	    var json=data.data;
+	    console.log(json);
+	  },"json");
+});
+
+$("#createfence").click(function(){
+	var json="{type:'circle',coordinates:'[[100.0,0.0],5]'}";
+	console.log(json);
+	$.ajax({
+
+	     type: 'POST',
+
+	     url: './fence',
+
+	    data: {token:token,GEOJSON:json},
+
+	    success: function(data){
+	    	 alert("status:" +data.ret.code+" msg:"+ data.ret.msg + "  data:fenceId=" + data.data.fenceId );
+	    } ,
+ 
+	    dataType: 'json'
+
+	});
+});
+
+$("#updatefence").click(function(){
+	
+	 $.ajax({
+
+	     type: 'PUT',
+   
+	     url: './fence/2?token='+token ,
+
+	    data:JSON.stringify({'GEOJSON':{'type':'circle','coordinates':'[[100.0,2.1],5]'}}),
+	    
+	    success: function(data){
+	    	 alert("status:" +data.ret.code+" msg:"+ data.ret.msg + "  data:=" + data.data );
+	    } ,
+
+	    dataType: 'json'
+
+	}); 
+
+});
+
+$("#deletefence").click(function(){
+	$.ajax({
+
+	     type: 'DELETE',
+
+	     url: './fence/3?token='+token ,
+		
+	    success: function(data){
+	    	 alert("status:" +data.ret.code+" msg:"+ data.ret.msg + "  data:=" + data.data );
+	    } ,
+
+	    dataType: 'json'
+
+	});
+});
+
+$("#getfence").click(function(){
+	$.ajax({
+
+	     type: 'GET',
+
+	     url: './fence/2' ,
+	     data: {token:token},
+	    success: function(data){
+	    	 alert("status:" +data.ret.code+" msg:"+ data.ret.msg + "  data:=" + data.data );
+	    } ,
+
+	    dataType: 'json'
+
+	});
+});
+
+$("#signin").click(function(){
+	$.post("./app/signin",{entityId:'100',userName:'seth',password:'1234',phone:'18501663453'},function(data){
+	    alert("status:" +data.ret.code+" msg:"+ data.ret.msg + "  data:token=" + data.data.token );
+	    token=data.data.token
+	  },"json");
+});
+
+$("#login").click(function(){
+	$.post("./app/login",{userName:'seth',password:'123'},function(data){
+	    alert("status:" +data.ret.code+" msg:"+ data.ret.msg + "  data:token=" + data.data.token );
+	    token=data.data.token
+	  },"json");
+});
+$("#getentities").click(function(){
+	
+	$.get("./entities",{token:token},function(data){
+	    alert("status:" +data.ret.code+" msg:"+ data.ret.msg);
+	    var json=data.data;
+	    console.log(json);
+	  },"json");
+});
+
+$("#getfences").click(function(){
+	
+	$.get("./fences",{token:token},function(data){
+	    alert("status:" +data.ret.code+" msg:"+ data.ret.msg);
+	    var json=data.data;
+	    console.log(json);
+	  },"json");
+});
+</script>
+  </body>
+</html>
